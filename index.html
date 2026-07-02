@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan Europa — Calculadora de Viaje</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f14;
+    --surface: #16181f;
+    --surface2: #1e2029;
+    --border: rgba(255,255,255,0.07);
+    --accent: #4ade80;
+    --accent2: #60a5fa;
+    --warn: #fb923c;
+    --danger: #f87171;
+    --text: #f0f0f0;
+    --muted: #6b7280;
+    --card-radius: 16px;
+    --gap: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0e1a2b 0%, #0e0f14 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 20px 24px;
+    text-align: center;
+  }
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .header h1 {
+    font-size: clamp(22px, 5vw, 36px);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .header h1 span { color: var(--accent2); }
+  .header-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* LAYOUT */
+  .main { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
+
+  /* SECTION TITLE */
+  .sec {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    margin: 28px 0 12px;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 18px;
+    margin-bottom: var(--gap);
+  }
+
+  /* GRID */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
+  .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
+  @media(max-width: 480px) {
+    .g4 { grid-template-columns: 1fr 1fr; }
+    .g3 { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* METRIC CARD */
+  .mc {
+    background: var(--surface2);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+  }
+  .mc-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .mc-value { font-size: 20px; font-weight: 600; line-height: 1.1; }
+  .mc-sub { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: 'Space Mono', monospace; }
+
+  /* INPUT GROUP */
+  .input-group {
+    margin-bottom: 16px;
+  }
+  .input-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .input-label span {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 700;
+  }
+  input[type=number] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 16px;
+    font-family: 'Space Mono', monospace;
+    color: var(--text);
+    outline: none;
+    transition: border-color .2s;
+    -webkit-appearance: none;
+  }
+  input[type=number]:focus { border-color: var(--accent2); }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--surface2);
+    outline: none;
+    margin-top: 8px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent2);
+    cursor: pointer;
+    border: 3px solid var(--bg);
+  }
+  input[type=range]::-moz-range-thumb {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--accent2);
+    cursor: pointer;
+    border: 3px solid var(--bg);
+  }
+
+  /* TOGGLE */
+  .toggle-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+  .toggle-btn {
+    padding: 7px 16px;
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Sora', sans-serif;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .toggle-btn.active {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    color: #0e0f14;
+    font-weight: 600;
+  }
+
+  /* STATUS BOX */
+  .status-ok {
+    background: rgba(74, 222, 128, 0.08);
+    border: 1px solid rgba(74, 222, 128, 0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--accent);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-warn {
+    background: rgba(251, 146, 60, 0.08);
+    border: 1px solid rgba(251, 146, 60, 0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--warn);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-danger {
+    background: rgba(248, 113, 113, 0.08);
+    border: 1px solid rgba(248, 113, 113, 0.25);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--danger);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* MONTH CARDS */
+  .month-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--gap);
+    margin-bottom: 16px;
+  }
+  @media(min-width: 480px) {
+    .month-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  .mcard {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    transition: border-color .3s;
+  }
+  .mcard.done { border-color: rgba(74,222,128,0.4); }
+  .mcard.over { border-color: rgba(96,165,250,0.4); }
+  .mcard-name { font-size: 11px; font-family: 'Space Mono', monospace; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
+  .mcard-save { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .mcard-total { font-size: 16px; font-weight: 600; margin-top: 4px; }
+  .mcard-pct { font-size: 10px; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; }
+  .prog-track { background: rgba(255,255,255,0.06); border-radius: 99px; height: 4px; overflow: hidden; margin-top: 6px; }
+  .prog-fill { height: 100%; border-radius: 99px; transition: width .5s ease; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* BANNER FINAL */
+  .banner {
+    background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(96,165,250,0.08));
+    border: 1px solid rgba(74,222,128,0.2);
+    border-radius: var(--card-radius);
+    padding: 22px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .banner-left .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  .banner-left .sub { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; }
+  .banner-right { text-align: right; }
+  .banner-right .big { font-size: clamp(24px, 6vw, 34px); font-weight: 600; font-family: 'Space Mono', monospace; }
+  .banner-right .small { font-size: 11px; color: var(--muted); margin-top: 3px; }
+
+  /* TIPS */
+  .tip {
+    background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 12px;
+    color: #93c5fd;
+    line-height: 1.6;
+    margin-top: 16px;
+  }
+  .tip strong { color: var(--accent2); }
+
+  /* ROW */
+  .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .row:last-child { border-bottom: none; }
+  .row .rl { color: var(--muted); }
+  .row .rv { font-weight: 600; font-family: 'Space Mono', monospace; font-size: 12px; }
+
+  /* PASAJE TOGGLE */
+  .pasaje-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color .2s;
+    margin-bottom: 8px;
+    user-select: none;
+  }
+  .pasaje-option:last-child { margin-bottom: 0; }
+  .pasaje-option.selected { border-color: var(--accent2); background: rgba(96,165,250,0.06); }
+  .pasaje-option input[type=radio] { display: none; }
+  .radio-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: border-color .2s;
+  }
+  .pasaje-option.selected .radio-dot { border-color: var(--accent2); }
+  .radio-inner {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    display: none;
+  }
+  .pasaje-option.selected .radio-inner { display: block; }
+  .opt-text .opt-label { font-size: 13px; font-weight: 500; }
+  .opt-text .opt-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .opt-price {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 20px; font-size: 11px; color: var(--muted); font-family: 'Space Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-tag">✈ Planificador financiero</div>
+  <h1>Plan <span>Europa</span></h1>
+  <div class="header-sub">24 ago – 13 sep · 21 días · 5 destinos</div>
+</div>
+
+<div class="main">
+
+  <!-- AHORROS ACTUALES -->
+  <div class="sec">💰 Ahorros actuales</div>
+  <div class="card">
+    <div class="g2" style="margin-bottom:12px;">
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Dólares ahorrados <span id="lbl-usd-ah">USD 0</span></div>
+        <input type="number" id="inp-usd-ah" value="0" min="0" placeholder="ej: 950" oninput="recalc()">
+      </div>
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Pesos ahorrados <span id="lbl-ars-ah">$0</span></div>
+        <input type="number" id="inp-ars-ah" value="0" min="0" placeholder="ej: 650000" oninput="recalc()">
+      </div>
+    </div>
+    <div class="input-group" style="margin-bottom:0;">
+      <div class="input-label">Tipo de cambio USD libre <span id="lbl-tc">$1.190</span></div>
+      <input type="range" id="sl-tc" min="1000" max="1600" value="1190" step="10" oninput="recalc()">
+    </div>
+  </div>
+
+  <!-- INGRESOS -->
+  <div class="sec">📈 Ingresos y ahorro mensual</div>
+  <div class="card">
+    <div class="g2" style="margin-bottom:12px;">
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Ingresos mensuales ARS <span id="lbl-ing">$0</span></div>
+        <input type="number" id="inp-ing" value="0" min="0" placeholder="ej: 2226863" oninput="recalc()">
+      </div>
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Gastos fijos ARS <span id="lbl-gas">$0</span></div>
+        <input type="number" id="inp-gas" value="0" min="0" placeholder="ej: 1530616" oninput="recalc()">
+      </div>
+    </div>
+    <hr class="divider">
+    <div class="input-group" style="margin-bottom:0;">
+      <div class="input-label">¿Cuánto separo para el viaje por mes? <span id="lbl-sep">$0</span></div>
+      <input type="range" id="sl-sep" min="0" max="1000000" value="0" step="10000" oninput="recalc()">
+    </div>
+    <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px;">
+      <span style="color:var(--muted);">Libre por mes</span>
+      <span id="libre-mes" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--accent);">$0</span>
+    </div>
+  </div>
+
+  <!-- PASAJE -->
+  <div class="sec">✈️ El pasaje internacional</div>
+  <div class="card">
+    <label class="pasaje-option selected" id="opt-propio" onclick="setPasaje('propio')">
+      <input type="radio" name="pasaje" value="propio" checked>
+      <div class="radio-dot"><div class="radio-inner"></div></div>
+      <div class="opt-text">
+        <div class="opt-label">Lo pago yo</div>
+        <div class="opt-sub">Se suma a la meta del viaje</div>
+      </div>
+      <div class="opt-price" style="color:var(--warn);">+USD 1.400</div>
+    </label>
+    <label class="pasaje-option" id="opt-amigo" onclick="setPasaje('amigo')">
+      <input type="radio" name="pasaje" value="amigo">
+      <div class="radio-dot"><div class="radio-inner"></div></div>
+      <div class="opt-text">
+        <div class="opt-label">Lo paga un amigo / ya está cubierto</div>
+        <div class="opt-sub">Solo necesito el presupuesto en Europa</div>
+      </div>
+      <div class="opt-price" style="color:var(--accent);">USD 0</div>
+    </label>
+  </div>
+
+  <!-- PRESUPUESTO EUROPA -->
+  <div class="sec">🗺️ Presupuesto en Europa</div>
+  <div class="card">
+    <div class="input-group">
+      <div class="input-label">Meta en Europa (USD) <span id="lbl-meta">USD 1.400</span></div>
+      <input type="range" id="sl-meta" min="800" max="3000" value="1400" step="50" oninput="recalc()">
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; font-size:11px; color:var(--muted);">
+      <div style="text-align:left;">$800 · mochilero</div>
+      <div style="text-align:center;">$1.400 · normal</div>
+      <div style="text-align:right;">$3.000 · cómodo</div>
+    </div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="sec">📊 Resumen financiero</div>
+  <div class="g2" style="margin-bottom:var(--gap);">
+    <div class="mc">
+      <div class="mc-label">Ya tenés hoy</div>
+      <div class="mc-value" id="r-ya" style="color:var(--accent);">USD 0</div>
+      <div class="mc-sub">ahorros convertidos</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Meta total del viaje</div>
+      <div class="mc-value" id="r-meta">USD 2.800</div>
+      <div class="mc-sub">pasaje + europa</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Ahorrás en 2 meses</div>
+      <div class="mc-value" id="r-nuevo" style="color:var(--accent2);">USD 0</div>
+      <div class="mc-sub">de acá al viaje</div>
+    </div>
+    <div class="mc">
+      <div class="mc-label">Total acumulado</div>
+      <div class="mc-value" id="r-total">USD 0</div>
+      <div class="mc-sub">al 24 de agosto</div>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div id="status-box"></div>
+
+  <!-- MES A MES -->
+  <div class="sec">🗓️ Mes a mes</div>
+  <div class="month-grid" id="month-grid"></div>
+
+  <!-- BANNER FINAL -->
+  <div class="banner" id="banner">
+    <div class="banner-left">
+      <div class="label">Total disponible para el viaje</div>
+      <div class="sub" id="banner-sub">completá los datos arriba</div>
+    </div>
+    <div class="banner-right">
+      <div class="big" id="banner-total" style="color:var(--accent);">USD 0</div>
+      <div class="small" id="banner-dia">— USD/día</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>Consejo:</strong> Convertí los pesos a dólares lo antes posible para protegerlos de la inflación. Los ingresos temporales tratálos como bonus — guardálos directamente en el fondo del viaje cada vez que entren.
+  </div>
+
+</div>
+
+<div class="footer">plan-europa · generado con claude · julio 2026</div>
+
+<script>
+let pasajeMode = 'propio';
+
+function setPasaje(mode) {
+  pasajeMode = mode;
+  document.getElementById('opt-propio').classList.toggle('selected', mode === 'propio');
+  document.getElementById('opt-amigo').classList.toggle('selected', mode === 'amigo');
+  recalc();
+}
+
+function fmtARS(n) {
+  return '$' + Math.round(n).toLocaleString('es-AR');
+}
+function fmtUSD(n) {
+  return 'USD ' + Math.round(n).toLocaleString('es-AR');
+}
+
+const MONTHS = [
+  { label: 'Julio', factor: 1 },
+  { label: 'Agosto', factor: 24/31, note: 'hasta el 24' }
+];
+const DIAS = 21;
+
+function recalc() {
+  const usdAh = parseFloat(document.getElementById('inp-usd-ah').value) || 0;
+  const arsAh = parseFloat(document.getElementById('inp-ars-ah').value) || 0;
+  const ing   = parseFloat(document.getElementById('inp-ing').value) || 0;
+  const gas   = parseFloat(document.getElementById('inp-gas').value) || 0;
+  const tc    = parseInt(document.getElementById('sl-tc').value);
+  const sep   = parseInt(document.getElementById('sl-sep').value);
+  const metaEur = parseInt(document.getElementById('sl-meta').value);
+
+  // Labels
+  document.getElementById('lbl-usd-ah').textContent = fmtUSD(usdAh);
+  document.getElementById('lbl-ars-ah').textContent = fmtARS(arsAh);
+  document.getElementById('lbl-tc').textContent = fmtARS(tc);
+  document.getElementById('lbl-ing').textContent = fmtARS(ing);
+  document.getElementById('lbl-gas').textContent = fmtARS(gas);
+  document.getElementById('lbl-meta').textContent = fmtUSD(metaEur);
+
+  // Libre por mes
+  const libre = ing - gas;
+  const libreEl = document.getElementById('libre-mes');
+  libreEl.textContent = fmtARS(Math.max(0, libre));
+  libreEl.style.color = libre >= 0 ? 'var(--accent)' : 'var(--danger)';
+
+  // Ajustar max del slider de separación
+  const maxSep = Math.max(libre, 0);
+  document.getElementById('sl-sep').max = Math.max(maxSep, 100000);
+  const sepReal = Math.min(sep, Math.max(libre, 0));
+  document.getElementById('lbl-sep').textContent = fmtARS(sepReal);
+
+  // Ahorros convertidos
+  const yaUSD = usdAh + (arsAh / tc);
+
+  // Pasaje
+  const costoViaje = metaEur + (pasajeMode === 'propio' ? 1400 : 0);
+  const metaLabel = pasajeMode === 'propio'
+    ? `Europa USD ${metaEur} + pasaje USD 1.400`
+    : `Solo Europa · pasaje cubierto`;
+
+  // Mes a mes
+  const usdMes = sepReal / tc;
+  let acumNuevo = 0;
+  const grid = document.getElementById('month-grid');
+  grid.innerHTML = '';
+
+  MONTHS.forEach((m, i) => {
+    const ganaMes = Math.round(usdMes * m.factor);
+    acumNuevo += ganaMes;
+    const totalAcum = yaUSD + acumNuevo;
+    const pct = Math.min(100, Math.round((totalAcum / costoViaje) * 100));
+    const done = totalAcum >= costoViaje;
+    const color = done ? '#4ade80' : '#60a5fa';
+
+    grid.innerHTML += `
+      <div class="mcard ${done ? 'done' : ''}">
+        <div class="mcard-name">${m.label}${m.note ? '<br>'+m.note : ''}</div>
+        <div class="mcard-save">+${fmtUSD(ganaMes)}</div>
+        <div class="mcard-total" style="color:${color};">${fmtUSD(Math.round(totalAcum))}</div>
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%; background:${color};"></div></div>
+        <div class="mcard-pct">${pct}% de la meta</div>
+      </div>`;
+  });
+
+  const totalFinal = yaUSD + acumNuevo;
+  const diff = totalFinal - costoViaje;
+
+  // Resumen cards
+  document.getElementById('r-ya').textContent = fmtUSD(Math.round(yaUSD));
+  document.getElementById('r-meta').textContent = fmtUSD(costoViaje);
+  document.getElementById('r-nuevo').textContent = fmtUSD(Math.round(acumNuevo));
+  document.getElementById('r-total').textContent = fmtUSD(Math.round(totalFinal));
+
+  // Status
+  const sb = document.getElementById('status-box');
+  if (totalFinal === 0 && sepReal === 0 && yaUSD === 0) {
+    sb.innerHTML = '';
+  } else if (diff >= 0) {
+    sb.innerHTML = `<div class="status-ok"><span class="status-icon">✓</span><div><strong>¡Llegás!</strong> Con este plan superás la meta en ${fmtUSD(Math.round(diff))}. Ese colchón cubre imprevistos, excursiones o simplemente viajar más tranquilo.</div></div>`;
+  } else if (diff >= -300) {
+    sb.innerHTML = `<div class="status-warn"><span class="status-icon">⚡</span><div><strong>Muy justo.</strong> Te faltan ${fmtUSD(Math.round(Math.abs(diff)))}. Subí el ahorro mensual o tratá los ingresos temporales como refuerzo directo al fondo del viaje.</div></div>`;
+  } else {
+    sb.innerHTML = `<div class="status-danger"><span class="status-icon">!</span><div><strong>Faltan ${fmtUSD(Math.round(Math.abs(diff)))}.</strong> Necesitás aumentar el ahorro mensual, conseguir ingresos extra, o ajustar el presupuesto en Europa.</div></div>`;
+  }
+
+  // Banner
+  document.getElementById('banner-total').textContent = fmtUSD(Math.round(totalFinal));
+  document.getElementById('banner-total').style.color = diff >= 0 ? 'var(--accent)' : 'var(--danger)';
+  document.getElementById('banner-sub').textContent = metaLabel;
+  document.getElementById('banner-dia').textContent = totalFinal > 0
+    ? `≈ USD ${Math.round(totalFinal / DIAS)} por día de viaje`
+    : '— completá los datos arriba';
+}
+
+recalc();
+</script>
+</body>
+</html>
