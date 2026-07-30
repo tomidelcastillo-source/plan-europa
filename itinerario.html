@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Mediterráneo 2026 — Itinerario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#faf6ec;
+    --card:#ffffff;
+    --line:#e6dfcd;
+    --ink:#20242a;
+    --ink-soft:#5a6068;
+
+    --spain-red:#a6192e;
+    --spain-gold:#dba500;
+    --spain-red-deep:#6e1020;
+
+    --balear-gold:#c99400;
+    --balear-blue:#1f5f8b;
+    --balear-blue-deep:#153f5c;
+
+    --italy-green:#0f6b41;
+    --italy-green-deep:#0a4a2d;
+    --italy-red:#a83226;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    line-height:1.55;
+    padding-bottom:40px;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 18px;}
+
+  /* HERO */
+  .hero{ position:relative; }
+  .cover-slot{
+    width:100%;
+    aspect-ratio:16/10;
+    background:
+      linear-gradient(180deg,rgba(32,36,42,.15),rgba(32,36,42,.55)),
+      repeating-linear-gradient(135deg,#2a3038 0 2px,#242830 2px 4px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+    padding:0 20px 26px;
+    text-align:center;
+    color:#faf6ec;
+  }
+  .cover-slot .plus{
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-120%);
+    width:38px;height:38px;
+    border:1.5px dashed rgba(250,246,236,.55);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+    color:rgba(250,246,236,.7);
+  }
+  .hero-eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--spain-gold);
+    margin-bottom:12px;
+  }
+  .hero h1{
+    font-family:'Fraunces',serif;
+    font-optical-sizing:auto;
+    font-weight:500;
+    font-size:clamp(28px,9vw,40px);
+    letter-spacing:-0.01em;
+    line-height:1.05;
+  }
+  .hero-dates{
+    margin-top:10px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:rgba(250,246,236,.75);
+  }
+  .flagstrip{
+    display:flex;
+    height:5px;
+    width:100%;
+  }
+  .flagstrip span{ flex:1; }
+
+  /* FLAG CHIPS */
+  .flagchip{
+    display:inline-block;
+    width:26px;height:17px;
+    border-radius:3px;
+    flex-shrink:0;
+    box-shadow:0 0 0 1px rgba(0,0,0,.06);
+  }
+  .flagchip.spain{
+    background:linear-gradient(to bottom,var(--spain-red) 0 25%,var(--spain-gold) 25% 75%,var(--spain-red) 75% 100%);
+  }
+  .flagchip.balear{
+    background:linear-gradient(to bottom,var(--spain-red) 0 20%,var(--balear-gold) 20% 55%,var(--spain-red) 55% 65%,var(--balear-gold) 65% 80%,var(--balear-blue) 80% 100%);
+  }
+  .flagchip.italy{
+    background:linear-gradient(to right,var(--italy-green) 0 33%,#f7f3e8 33% 66%,var(--italy-red) 66% 100%);
+  }
+
+  /* SECTION LABEL */
+  .region-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:36px 0 6px;
+  }
+  .region-name{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:21px;
+    letter-spacing:-0.01em;
+  }
+  .region-line{
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .region-dates{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .region-summary{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin:6px 0 12px;
+  }
+
+  /* DAY CARD */
+  .day{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 18px;
+    margin-bottom:12px;
+    border-left-width:3px;
+    border-left-style:solid;
+  }
+  .day-date{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    font-weight:500;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    margin-bottom:6px;
+  }
+  .day-body{ font-size:14.5px; color:#2c3138; }
+  .day-body ul{ padding-left:18px; margin-top:2px; }
+  .day-body li{ margin-bottom:3px; }
+
+  /* PHOTO SLOT (per day) */
+  .photo-slot{
+    margin-top:12px;
+    aspect-ratio:16/9;
+    border-radius:10px;
+    border:1.5px dashed var(--line);
+    background:#faf8f2;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    color:#a8a08c;
+    font-size:12px;
+  }
+  .photo-slot .dot{
+    width:16px;height:16px;
+    border:1.5px dashed #b8b096;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;
+    line-height:1;
+  }
+
+  /* TIP */
+  .tip{
+    display:flex;
+    gap:10px;
+    background:#f3ede0;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:11px 13px;
+    margin-top:10px;
+    font-size:13px;
+    color:#4a4030;
+    line-height:1.5;
+  }
+  .tip .mark{
+    font-family:'JetBrains Mono',monospace;
+    font-weight:500;
+    flex-shrink:0;
+  }
+
+  /* FLIGHT CARD */
+  .flight{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:var(--ink);
+    color:#faf6ec;
+    border-radius:12px;
+    padding:14px 18px;
+    margin:10px 0;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .flight-route{ font-size:13px; font-weight:500; }
+  .flight-time{ font-size:16px; font-weight:500; }
+
+  /* CLOSING */
+  .closing{
+    margin-top:40px;
+    padding:22px 20px;
+    background:var(--ink);
+    color:#faf6ec;
+    border-radius:16px;
+    text-align:center;
+  }
+  .closing h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:20px;
+    margin-bottom:6px;
+  }
+  .closing p{ font-size:13px; color:#c9c4b6; }
+
+  /* GENERAL TIPS */
+  .gentips{ margin-top:30px; }
+  .gentips h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:20px;
+    margin-bottom:12px;
+  }
+  .gentip-item{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .gentip-item:last-child{ border-bottom:none; }
+  .gentip-num{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--balear-blue);
+    flex-shrink:0;
+    padding-top:2px;
+  }
+  .gentip-text{ font-size:13.5px; color:#2c3138; }
+  .gentip-text strong{ font-weight:600; color:var(--ink); }
+
+  /* HOW TO ADD PHOTOS NOTE */
+  .howto{
+    margin-top:30px;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:#f3ede0;
+    font-size:12.5px;
+    color:#4a4030;
+    line-height:1.6;
+  }
+  .howto strong{ display:block; margin-bottom:4px; font-size:13px; color:var(--ink); }
+  .howto code{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11.5px;
+    background:rgba(0,0,0,.06);
+    padding:1px 5px;
+    border-radius:4px;
+  }
+
+  .footer{
+    text-align:center;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10.5px;
+    color:var(--ink-soft);
+    padding:28px 20px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="cover-slot" id="cover-photo">
+    <div class="plus">+</div>
+    <div class="hero-eyebrow">Itinerario de viaje</div>
+    <h1>Mediterráneo 2026</h1>
+    <div class="hero-dates">25 ago — 12 sep · 19 días</div>
+  </div>
+  <div class="flagstrip">
+    <span style="background:var(--spain-red);"></span>
+    <span style="background:var(--spain-gold);"></span>
+    <span style="background:var(--balear-blue);"></span>
+    <span style="background:var(--italy-green);"></span>
+    <span style="background:var(--italy-red);"></span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- MADRID -->
+  <div class="region-head">
+    <span class="flagchip spain"></span>
+    <span class="region-name">Madrid</span>
+    <span class="region-line"></span>
+    <span class="region-dates">25–27 ago</span>
+  </div>
+  <div class="region-summary">Arranque tranquilo: reencuentro, comidas con calma y una caminata sin apuro por el centro.</div>
+
+  <div class="day" style="border-left-color:var(--spain-red);">
+    <div class="day-date" style="color:var(--spain-red-deep);">25–27 ago</div>
+    <div class="day-body">
+      <ul>
+        <li>Reencuentro y comidas con calma</li>
+        <li>Museo del Prado</li>
+        <li>Caminata libre por la ciudad — lo que pinte</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--spain-red-deep);">TIP</span> El Prado se llena rápido en temporada alta — conviene sacar la entrada online un día antes y entrar apenas abre para evitar la cola.</div>
+    <div class="photo-slot" data-day="madrid-1"><span class="dot">+</span> foto del reencuentro / Prado</div>
+  </div>
+
+  <!-- BARCELONA -->
+  <div class="region-head">
+    <span class="flagchip spain"></span>
+    <span class="region-name">Barcelona</span>
+    <span class="region-line"></span>
+    <span class="region-dates">27–31 ago</span>
+  </div>
+  <div class="region-summary">Base en Gràcia. Cinco días bien cargados entre Gaudí, barrios, un cumpleaños y un día de parque.</div>
+
+  <div class="day" style="border-left-color:var(--spain-gold);">
+    <div class="day-date" style="color:var(--spain-red-deep);">27 ago</div>
+    <div class="day-body">
+      <ul>
+        <li>Llegada a Sants — dejar valijas (¿almuerzo?)</li>
+        <li>Hospital de Sant Pau &amp; Sagrada Familia</li>
+        <li>Al depto en Gràcia</li>
+        <li>Carretera de les Aigües y atardecer en los Búnkers del Carmel</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--spain-red-deep);">TIP</span> La Sagrada Familia se reserva con turno horario — comprala online con antelación, se agota. Los Búnkers se llenan bastante antes de la puesta de sol en verano: subir con 45-60 min de margen.</div>
+    <div class="photo-slot" data-day="bcn-27"><span class="dot">+</span> foto de la Sagrada Familia / Búnkers</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--spain-gold);">
+    <div class="day-date" style="color:var(--spain-red-deep);">28 ago — día en Gràcia</div>
+    <div class="day-body">
+      <ul>
+        <li>Casa Vicens</li>
+        <li>Plazas de Gràcia</li>
+        <li>Café del Teatre</li>
+        <li>¿Free tour?</li>
+        <li>Born y Gòtic</li>
+        <li>La Central del Raval</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--spain-red-deep);">TIP</span> Casa Vicens cierra los lunes — chequear antes de ir. Los free tours salen puntuales desde Plaça Catalunya o Portal de l'Àngel; llegar 10 min antes.</div>
+    <div class="photo-slot" data-day="bcn-28"><span class="dot">+</span> foto de Gràcia / Born</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--spain-gold);">
+    <div class="day-date" style="color:var(--spain-red-deep);">29 ago</div>
+    <div class="day-body">
+      <ul>
+        <li>Fiestas de Sants</li>
+        <li>Castillo de Montjuïc</li>
+        <li>Paseo hasta el W, vistas al mar</li>
+        <li>¿Bowling?</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--spain-red-deep);">TIP</span> Las Fiestas de Sants ganan de noche — correfocs y calles decoradas. Si el plan de Montjuïc es de día, dejá la fiesta para después de cenar.</div>
+    <div class="photo-slot" data-day="bcn-29"><span class="dot">+</span> foto de Montjuïc / el mar</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--spain-gold);">
+    <div class="day-date" style="color:var(--spain-red-deep);">30 ago</div>
+    <div class="day-body">
+      <ul>
+        <li>Castelldefels a la mañana</li>
+        <li>Cumple de Paio (¿irish pub?)</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--spain-red-deep);">TIP</span> Castelldefels queda a ~20 min en tren R2 desde Sants — buena mañana de playa antes de la noche del cumple.</div>
+    <div class="photo-slot" data-day="bcn-30"><span class="dot">+</span> foto de Castelldefels / el cumple</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--spain-gold);">
+    <div class="day-date" style="color:var(--spain-red-deep);">31 ago</div>
+    <div class="day-body">
+      <ul>
+        <li>Día completo en PortAventura</li>
+      </ul>
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--spain-red-deep);">TIP</span> Comprá la entrada online con anticipación (sale más barata que en boletería) y evaluá el Express Pass si son pocos — en temporada alta las filas de las atracciones top superan la hora.</div>
+    <div class="photo-slot" data-day="bcn-31"><span class="dot">+</span> foto de PortAventura</div>
+  </div>
+
+  <!-- MALLORCA -->
+  <div class="region-head">
+    <span class="flagchip balear"></span>
+    <span class="region-name">Mallorca</span>
+    <span class="region-line"></span>
+    <span class="region-dates">1–5 sep</span>
+  </div>
+  <div class="region-summary">Con amigos, sin plan armado — días libres para que fluya.</div>
+
+  <div class="flight" style="background:var(--balear-blue-deep);">
+    <span class="flight-route">BCN → Palma de Mallorca</span>
+    <span class="flight-time" style="color:var(--balear-gold);">1 sep · 07:00</span>
+  </div>
+  <div class="tip"><span class="mark" style="color:var(--balear-blue-deep);">TIP</span> Vuelo a las 7am significa salir de casa muy temprano — conviene tener el traslado al aeropuerto resuelto la noche anterior (taxi reservado o dormir cerca) para no arrancar Mallorca con estrés.</div>
+  <div class="photo-slot" data-day="mallorca"><span class="dot">+</span> fotos de Mallorca con amigos</div>
+
+  <!-- NAPOLI + AMALFI -->
+  <div class="region-head">
+    <span class="flagchip italy"></span>
+    <span class="region-name">Nápoles + Costa Amalfitana</span>
+    <span class="region-line"></span>
+    <span class="region-dates">6–11 sep</span>
+  </div>
+  <div class="region-summary">2 noches en Nápoles como base para las islas, luego 3 noches en Sorrento como base para la costa.</div>
+
+  <div class="day" style="border-left-color:var(--italy-green);">
+    <div class="day-date" style="color:var(--italy-green-deep);">Día 1 · 6 sep — Esencia de Nápoles</div>
+    <div class="day-body">Día completo en el centro histórico: Spaccanapoli y Vía Toledo, con foco en la gastronomía local. Noche en Nápoles.</div>
+    <div class="photo-slot" data-day="napoles-1"><span class="dot">+</span> foto de Spaccanapoli</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--italy-green);">
+    <div class="day-date" style="color:var(--italy-green-deep);">Día 2 · 7 sep — Ischia + Prócida</div>
+    <div class="day-body">Ferri rápido desde Molo Beverello: mañana en Ischia, almuerzo y tarde en Prócida. Regreso al atardecer. Noche en Nápoles.</div>
+    <div class="tip"><span class="mark" style="color:var(--italy-green-deep);">TIP</span> Reservá los pasajes de ferri con anticipación en temporada alta (NLG, Alilauro, Caremar) — las últimas frecuencias del día suelen agotarse primero.</div>
+    <div class="photo-slot" data-day="ischia-procida"><span class="dot">+</span> foto de Ischia / Prócida</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--italy-green);">
+    <div class="day-date" style="color:var(--italy-green-deep);">Día 3 · 8 sep — Sorrento + Positano</div>
+    <div class="day-body">
+      Mañana: Circumvesuviana temprano a Sorrento (1h), check-in / dejar valijas.<br>
+      Tarde: ferri de 40 min a Positano — Spiaggia Grande, tiendas de lino, aperitivo viendo el atardecer. Vuelta en ferri o en bus SITA Sud. Noche en Sorrento.
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--italy-green-deep);">TIP</span> Ir de tarde evita el calor y la marea de turistas de crucero del mediodía. Positano es muy vertical — calzado cómodo, no de playa.</div>
+    <div class="photo-slot" data-day="positano"><span class="dot">+</span> foto de Positano</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--italy-green);">
+    <div class="day-date" style="color:var(--italy-green-deep);">Día 4 · 9 sep — Capri</div>
+    <div class="day-body">Día completo: ferri rápido desde Sorrento (20 min), funicular a la Piazzetta, Jardines de Augusto (vista a los Faraglioni), bus a Anacapri. Si el mar acompaña, tour en barco alrededor de la isla. Noche en Sorrento.</div>
+    <div class="tip"><span class="mark" style="color:var(--italy-green-deep);">TIP</span> Salir en el primer ferri de la mañana — Capri se satura de excursiones de un día y de cruceros a partir del mediodía.</div>
+    <div class="photo-slot" data-day="capri"><span class="dot">+</span> foto de Capri</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--italy-green);">
+    <div class="day-date" style="color:var(--italy-green-deep);">Día 5 · 10 sep — Amalfi + Ravello</div>
+    <div class="day-body">
+      Mañana: bus SITA Sud o ferri directo desde Sorrento a Amalfi — catedral y callejones blancos.<br>
+      Tarde: bus local de Amalfi a Ravello (20 min) — Villa Cimbrone y sus jardines con vista al mar. Vuelta en bus/ferri. Noche en Sorrento.
+    </div>
+    <div class="tip"><span class="mark" style="color:var(--italy-green-deep);">TIP</span> El billete del SITA Sud se compra antes de subir, en un estanco (Tabacchi) — no se paga arriba del bus.</div>
+    <div class="photo-slot" data-day="amalfi-ravello"><span class="dot">+</span> foto de Amalfi / Ravello</div>
+  </div>
+
+  <div class="day" style="border-left-color:var(--italy-green);">
+    <div class="day-date" style="color:var(--italy-green-deep);">Día 6 · 11 sep — Regreso a Nápoles</div>
+    <div class="day-body">Desayuno tranquilo en Sorrento y Circumvesuviana de vuelta a Nápoles (1h), llegando antes del mediodía.</div>
+  </div>
+
+  <div class="flight" style="background:var(--italy-green-deep);">
+    <span class="flight-route">Nápoles → Barcelona</span>
+    <span class="flight-time" style="color:#f7f3e8;">11 sep · 21:55</span>
+  </div>
+  <div class="tip"><span class="mark" style="color:var(--italy-green-deep);">TIP</span> Con el vuelo recién a las 21:55, queda toda la tarde libre en Nápoles — buen momento para dejar el equipaje en consigna en la estación y pasear sin apuro antes de ir al aeropuerto.</div>
+
+  <!-- DESPEDIDA -->
+  <div class="region-head">
+    <span class="flagchip spain"></span>
+    <span class="region-name">Barcelona → Madrid</span>
+    <span class="region-line"></span>
+    <span class="region-dates">12 sep</span>
+  </div>
+  <div class="region-summary">Cierre del viaje — despedida.</div>
+  <div class="photo-slot" data-day="despedida"><span class="dot">+</span> la foto de cierre del viaje</div>
+
+  <!-- TIPS GENERALES -->
+  <div class="gentips">
+    <h2>Consejos generales</h2>
+    <div class="gentip-item">
+      <span class="gentip-num">01</span>
+      <span class="gentip-text"><strong>Transporte a las islas y a Ravello:</strong> siempre ferri para Ischia, Prócida, Capri y Positano — más puntual y panorámico que la carretera. Para subir a Ravello es obligatorio el bus SITA Sud desde Amalfi.</span>
+    </div>
+    <div class="gentip-item">
+      <span class="gentip-num">02</span>
+      <span class="gentip-text"><strong>Volver a Nápoles:</strong> el tren Circumvesuviana (o el turístico Campania Express) sale cada 30 min desde el centro de Sorrento — la opción más segura para no quedar atrapado en la carretera costera.</span>
+    </div>
+    <div class="gentip-item">
+      <span class="gentip-num">03</span>
+      <span class="gentip-text"><strong>Pagar siempre en moneda local (EUR):</strong> si el POS o cajero pregunta "pagar en pesos/USD o en euros", elegí siempre euros — evita el recargo de conversión (DCC).</span>
+    </div>
+    <div class="gentip-item">
+      <span class="gentip-num">04</span>
+      <span class="gentip-text"><strong>Reservas con anticipación:</strong> Sagrada Familia, ferrys de temporada alta (Ischia/Prócida/Capri/Positano) y PortAventura conviene comprarlos online con varios días de margen — en agosto/septiembre se agotan.</span>
+    </div>
+    <div class="gentip-item">
+      <span class="gentip-num">05</span>
+      <span class="gentip-text"><strong>Equipaje liviano para el tramo Nápoles-Amalfi:</strong> con cambios de base (Nápoles → Sorrento) y trenes/ferrys todos los días, una valija más chica o mochila hace mucho más simple la logística.</span>
+    </div>
+  </div>
+
+  <div class="closing">
+    <h3>Buen viaje</h3>
+    <p>19 días, 4 destinos, un montón de ferrys — a disfrutarlo.</p>
+  </div>
+
+  <div class="howto">
+    <strong>Cómo convertirlo en recuerdo, después del viaje</strong>
+    Cada casilla punteada es un lugar para una foto. Abrí el archivo con un editor de texto, buscá el <code>div class="photo-slot"</code> del día que querés y reemplazá su contenido por: <code>&lt;img src="fotos/nombre.jpg" style="width:100%;height:100%;object-fit:cover;border-radius:10px"&gt;</code>. Lo mismo con <code>#cover-photo</code> para la foto de portada.
+  </div>
+
+</div>
+
+<div class="footer">itinerario mediterráneo · 25 ago – 12 sep 2026</div>
+
+</body>
+</html>
