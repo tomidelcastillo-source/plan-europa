@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Plan Europa — Calculadora de Viaje</title>
+<title>Plan Europa — Gastos del Viaje</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -22,246 +22,58 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 16px; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Sora', sans-serif;
-    min-height: 100vh;
-    padding: 0;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Sora', sans-serif; min-height: 100vh; }
 
-  /* HEADER */
   .header {
     background: linear-gradient(135deg, #0e1a2b 0%, #0e0f14 60%);
     border-bottom: 1px solid var(--border);
     padding: 28px 20px 24px;
     text-align: center;
   }
-  .header-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--accent);
-    letter-spacing: .2em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-  .header h1 {
-    font-size: clamp(22px, 5vw, 36px);
-    font-weight: 600;
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
+  .header-tag { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-size: clamp(22px, 5vw, 36px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.1; }
   .header h1 span { color: var(--accent2); }
-  .header-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 6px;
-  }
+  .header-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
-  /* LAYOUT */
   .main { max-width: 720px; margin: 0 auto; padding: 20px 16px 60px; }
+  .sec { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: .15em; text-transform: uppercase; margin: 28px 0 12px; display: flex; justify-content: space-between; align-items: center; }
+  .sec-action { font-size: 10px; color: var(--accent2); cursor: pointer; text-transform: none; letter-spacing: 0; }
 
-  /* SECTION TITLE */
-  .sec {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: .15em;
-    text-transform: uppercase;
-    margin: 28px 0 12px;
-  }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--card-radius); padding: 18px; margin-bottom: var(--gap); }
 
-  /* CARD */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--card-radius);
-    padding: 18px;
-    margin-bottom: var(--gap);
-  }
-
-  /* GRID */
   .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap); }
   .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
-  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); }
-  @media(max-width: 480px) {
-    .g4 { grid-template-columns: 1fr 1fr; }
-    .g3 { grid-template-columns: 1fr 1fr; }
-  }
+  @media(max-width: 480px) { .g3 { grid-template-columns: 1fr 1fr; } }
 
-  /* METRIC CARD */
-  .mc {
-    background: var(--surface2);
-    border-radius: 12px;
-    padding: 14px;
-    border: 1px solid var(--border);
-  }
+  .mc { background: var(--surface2); border-radius: 12px; padding: 14px; border: 1px solid var(--border); }
   .mc-label { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
   .mc-value { font-size: 20px; font-weight: 600; line-height: 1.1; }
   .mc-sub { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: 'Space Mono', monospace; }
 
-  /* INPUT GROUP */
-  .input-group {
-    margin-bottom: 16px;
+  .input-group { margin-bottom: 14px; }
+  .input-group:last-child { margin-bottom: 0; }
+  .input-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .input-label span { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--text); font-weight: 700; }
+  input[type=number], input[type=text], select {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 14px; font-size: 16px; font-family: 'Space Mono', monospace; color: var(--text);
+    outline: none; transition: border-color .2s; -webkit-appearance: none;
   }
-  .input-label {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 6px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .input-label span {
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    color: var(--text);
-    font-weight: 700;
-  }
-  input[type=number] {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    font-size: 16px;
-    font-family: 'Space Mono', monospace;
-    color: var(--text);
-    outline: none;
-    transition: border-color .2s;
-    -webkit-appearance: none;
-  }
-  input[type=number]:focus { border-color: var(--accent2); }
-  input[type=range] {
-    width: 100%;
-    -webkit-appearance: none;
-    height: 4px;
-    border-radius: 99px;
-    background: var(--surface2);
-    outline: none;
-    margin-top: 8px;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: var(--accent2);
-    cursor: pointer;
-    border: 3px solid var(--bg);
-  }
-  input[type=range]::-moz-range-thumb {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: var(--accent2);
-    cursor: pointer;
-    border: 3px solid var(--bg);
-  }
+  input[type=text] { font-family: 'Sora', sans-serif; font-size: 14px; }
+  select { font-family: 'Sora', sans-serif; font-size: 14px; }
+  input:focus, select:focus { border-color: var(--accent2); }
 
-  /* TOGGLE */
-  .toggle-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .toggle-btn {
-    padding: 7px 16px;
-    border-radius: 99px;
-    border: 1px solid var(--border);
-    background: var(--surface2);
-    color: var(--muted);
-    font-size: 12px;
-    font-family: 'Sora', sans-serif;
-    cursor: pointer;
-    transition: all .2s;
-  }
-  .toggle-btn.active {
-    background: var(--accent2);
-    border-color: var(--accent2);
-    color: #0e0f14;
-    font-weight: 600;
-  }
+  .status-ok { background: rgba(74,222,128,.08); border: 1px solid rgba(74,222,128,.25); border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--accent); display: flex; gap: 10px; margin-bottom: 16px; }
+  .status-warn { background: rgba(251,146,60,.08); border: 1px solid rgba(251,146,60,.25); border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--warn); display: flex; gap: 10px; margin-bottom: 16px; }
+  .status-danger { background: rgba(248,113,113,.08); border: 1px solid rgba(248,113,113,.25); border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--danger); display: flex; gap: 10px; margin-bottom: 16px; }
+  .status-icon { font-size: 18px; flex-shrink: 0; }
 
-  /* STATUS BOX */
-  .status-ok {
-    background: rgba(74, 222, 128, 0.08);
-    border: 1px solid rgba(74, 222, 128, 0.25);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 13px;
-    color: var(--accent);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .status-warn {
-    background: rgba(251, 146, 60, 0.08);
-    border: 1px solid rgba(251, 146, 60, 0.25);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 13px;
-    color: var(--warn);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .status-danger {
-    background: rgba(248, 113, 113, 0.08);
-    border: 1px solid rgba(248, 113, 113, 0.25);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 13px;
-    color: var(--danger);
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .status-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-  /* MONTH CARDS */
-  .month-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--gap);
-    margin-bottom: 16px;
-  }
-  @media(min-width: 480px) {
-    .month-grid { grid-template-columns: repeat(4, 1fr); }
-  }
-  .mcard {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    transition: border-color .3s;
-  }
-  .mcard.done { border-color: rgba(74,222,128,0.4); }
-  .mcard.over { border-color: rgba(96,165,250,0.4); }
-  .mcard-name { font-size: 11px; font-family: 'Space Mono', monospace; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
-  .mcard-save { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .mcard-total { font-size: 16px; font-weight: 600; margin-top: 4px; }
-  .mcard-pct { font-size: 10px; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; }
-  .prog-track { background: rgba(255,255,255,0.06); border-radius: 99px; height: 4px; overflow: hidden; margin-top: 6px; }
-  .prog-fill { height: 100%; border-radius: 99px; transition: width .5s ease; }
-
-  /* DIVIDER */
   .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
-  /* BANNER FINAL */
   .banner {
-    background: linear-gradient(135deg, rgba(74,222,128,0.08), rgba(96,165,250,0.08));
-    border: 1px solid rgba(74,222,128,0.2);
-    border-radius: var(--card-radius);
-    padding: 22px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-top: 8px;
+    background: linear-gradient(135deg, rgba(74,222,128,.08), rgba(96,165,250,.08));
+    border: 1px solid rgba(74,222,128,.2); border-radius: var(--card-radius); padding: 22px 20px;
+    display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 8px;
   }
   .banner-left .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
   .banner-left .sub { font-size: 11px; color: var(--muted); margin-top: 4px; font-family: 'Space Mono', monospace; }
@@ -269,328 +81,421 @@
   .banner-right .big { font-size: clamp(24px, 6vw, 34px); font-weight: 600; font-family: 'Space Mono', monospace; }
   .banner-right .small { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
-  /* TIPS */
-  .tip {
-    background: rgba(96,165,250,0.06);
-    border: 1px solid rgba(96,165,250,0.15);
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 12px;
-    color: #93c5fd;
-    line-height: 1.6;
-    margin-top: 16px;
-  }
+  .tip { background: rgba(96,165,250,.06); border: 1px solid rgba(96,165,250,.15); border-radius: 12px; padding: 14px 16px; font-size: 12px; color: #93c5fd; line-height: 1.6; margin-top: 16px; }
   .tip strong { color: var(--accent2); }
 
-  /* ROW */
-  .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-  .row:last-child { border-bottom: none; }
-  .row .rl { color: var(--muted); }
-  .row .rv { font-weight: 600; font-family: 'Space Mono', monospace; font-size: 12px; }
+  /* TRAMO ROWS */
+  .tramo-row { display: grid; grid-template-columns: 1fr 60px 90px 90px; gap: 8px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .tramo-row:last-child { border-bottom: none; }
+  .tramo-row .tname { font-weight: 500; }
+  .tramo-row .tdays { color: var(--muted); font-family: 'Space Mono', monospace; text-align: center; }
+  .tramo-row input { padding: 8px; font-size: 13px; text-align: center; }
+  .tramo-row .tsub { font-family: 'Space Mono', monospace; text-align: right; color: var(--accent2); font-weight: 700; }
+  .tramo-head { display: grid; grid-template-columns: 1fr 60px 90px 90px; gap: 8px; font-size: 10px; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+  .tramo-head .th-r { text-align: right; }
+  .tramo-head .th-c { text-align: center; }
 
-  /* PASAJE TOGGLE */
-  .pasaje-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: border-color .2s;
-    margin-bottom: 8px;
-    user-select: none;
-  }
-  .pasaje-option:last-child { margin-bottom: 0; }
-  .pasaje-option.selected { border-color: var(--accent2); background: rgba(96,165,250,0.06); }
-  .pasaje-option input[type=radio] { display: none; }
-  .radio-dot {
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    transition: border-color .2s;
-  }
-  .pasaje-option.selected .radio-dot { border-color: var(--accent2); }
-  .radio-inner {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--accent2);
-    display: none;
-  }
-  .pasaje-option.selected .radio-inner { display: block; }
-  .opt-text .opt-label { font-size: 13px; font-weight: 500; }
-  .opt-text .opt-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .opt-price {
-    margin-left: auto;
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-  }
+  .tramo-progress { display: grid; gap: 10px; }
+  .tp-row { }
+  .tp-top { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
+  .tp-name { font-weight: 500; }
+  .tp-nums { font-family: 'Space Mono', monospace; color: var(--muted); }
+  .tp-track { background: rgba(255,255,255,.06); border-radius: 99px; height: 6px; overflow: hidden; }
+  .tp-fill { height: 100%; border-radius: 99px; transition: width .4s ease; }
 
-  /* FOOTER */
+  /* GASTOS FORM */
+  .gasto-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .gasto-form .full { grid-column: 1 / -1; }
+  .btn-add {
+    grid-column: 1 / -1; background: var(--accent2); color: #0e0f14; border: none; border-radius: 10px;
+    padding: 12px; font-size: 14px; font-weight: 600; font-family: 'Sora', sans-serif; cursor: pointer;
+  }
+  .btn-add:active { opacity: .8; }
+
+  .gasto-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .gasto-item:last-child { border-bottom: none; }
+  .gasto-tag { font-size: 9px; font-family: 'Space Mono', monospace; text-transform: uppercase; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 3px 6px; color: var(--muted); flex-shrink: 0; }
+  .gasto-note { flex: 1; color: var(--text); }
+  .gasto-note .gasto-date { display: block; font-size: 10px; color: var(--muted); font-family: 'Space Mono', monospace; margin-top: 2px; }
+  .gasto-amt { font-family: 'Space Mono', monospace; font-weight: 700; color: var(--danger); }
+  .gasto-del { color: var(--muted); cursor: pointer; font-size: 16px; padding: 0 4px; flex-shrink: 0; }
+  .gasto-empty { color: var(--muted); font-size: 12px; text-align: center; padding: 12px 0; }
+
   .footer { text-align: center; padding: 20px; font-size: 11px; color: var(--muted); font-family: 'Space Mono', monospace; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-tag">✈ Planificador financiero</div>
+  <div class="header-tag">✈ Seguimiento en vivo</div>
   <h1>Plan <span>Europa</span></h1>
-  <div class="header-sub">24 ago – 13 sep · 21 días · 5 destinos</div>
+  <div class="header-sub">25 ago – 12 sep · 19 días · Madrid · Barcelona · Mallorca · Nápoles · Amalfi</div>
 </div>
 
 <div class="main">
 
-  <!-- AHORROS ACTUALES -->
-  <div class="sec">💰 Ahorros actuales</div>
+  <!-- FONDOS -->
+  <div class="sec">💰 Con qué plata contás</div>
   <div class="card">
-    <div class="g2" style="margin-bottom:12px;">
-      <div class="input-group" style="margin-bottom:0;">
-        <div class="input-label">Dólares ahorrados <span id="lbl-usd-ah">USD 0</span></div>
-        <input type="number" id="inp-usd-ah" value="0" min="0" placeholder="ej: 950" oninput="recalc()">
+    <div class="g2">
+      <div class="input-group">
+        <div class="input-label">Banco (USD) <span id="lbl-banco">USD 0</span></div>
+        <input type="number" id="inp-banco" value="1275" min="0" oninput="recalc()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Efectivo propio (USD) <span id="lbl-ef">USD 0</span></div>
+        <input type="number" id="inp-ef" value="955" min="0" oninput="recalc()">
       </div>
       <div class="input-group" style="margin-bottom:0;">
-        <div class="input-label">Pesos ahorrados <span id="lbl-ars-ah">$0</span></div>
-        <input type="number" id="inp-ars-ah" value="0" min="0" placeholder="ej: 650000" oninput="recalc()">
+        <div class="input-label">Tarjeta de mamá (USD) <span id="lbl-mama">USD 0</span></div>
+        <input type="number" id="inp-mama" value="600" min="0" oninput="recalc()">
       </div>
-    </div>
-    <div class="input-group" style="margin-bottom:0;">
-      <div class="input-label">Tipo de cambio USD libre <span id="lbl-tc">$1.190</span></div>
-      <input type="range" id="sl-tc" min="1000" max="1600" value="1190" step="10" oninput="recalc()">
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Otro / extra (USD) <span id="lbl-extra">USD 0</span></div>
+        <input type="number" id="inp-extra" value="0" min="0" oninput="recalc()">
+      </div>
     </div>
   </div>
 
-  <!-- INGRESOS -->
-  <div class="sec">📈 Ingresos y ahorro mensual</div>
+  <!-- PRESUPUESTO POR TRAMO -->
+  <div class="sec">🗺️ Presupuesto por tramo <span class="sec-action" onclick="resetTramos()">restablecer</span></div>
   <div class="card">
-    <div class="g2" style="margin-bottom:12px;">
-      <div class="input-group" style="margin-bottom:0;">
-        <div class="input-label">Ingresos mensuales ARS <span id="lbl-ing">$0</span></div>
-        <input type="number" id="inp-ing" value="0" min="0" placeholder="ej: 2226863" oninput="recalc()">
-      </div>
-      <div class="input-group" style="margin-bottom:0;">
-        <div class="input-label">Gastos fijos ARS <span id="lbl-gas">$0</span></div>
-        <input type="number" id="inp-gas" value="0" min="0" placeholder="ej: 1530616" oninput="recalc()">
-      </div>
+    <div class="tramo-head">
+      <div>Destino</div><div class="th-c">Días</div><div class="th-c">USD/día</div><div class="th-r">Subtotal</div>
     </div>
+    <div id="tramo-list"></div>
     <hr class="divider">
     <div class="input-group" style="margin-bottom:0;">
-      <div class="input-label">¿Cuánto separo para el viaje por mes? <span id="lbl-sep">$0</span></div>
-      <input type="range" id="sl-sep" min="0" max="1000000" value="0" step="10000" oninput="recalc()">
-    </div>
-    <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px;">
-      <span style="color:var(--muted);">Libre por mes</span>
-      <span id="libre-mes" style="font-family:'Space Mono',monospace; font-weight:700; color:var(--accent);">$0</span>
-    </div>
-  </div>
-
-  <!-- PASAJE -->
-  <div class="sec">✈️ El pasaje internacional</div>
-  <div class="card">
-    <label class="pasaje-option selected" id="opt-propio" onclick="setPasaje('propio')">
-      <input type="radio" name="pasaje" value="propio" checked>
-      <div class="radio-dot"><div class="radio-inner"></div></div>
-      <div class="opt-text">
-        <div class="opt-label">Lo pago yo</div>
-        <div class="opt-sub">Se suma a la meta del viaje</div>
-      </div>
-      <div class="opt-price" style="color:var(--warn);">+USD 1.400</div>
-    </label>
-    <label class="pasaje-option" id="opt-amigo" onclick="setPasaje('amigo')">
-      <input type="radio" name="pasaje" value="amigo">
-      <div class="radio-dot"><div class="radio-inner"></div></div>
-      <div class="opt-text">
-        <div class="opt-label">Lo paga un amigo / ya está cubierto</div>
-        <div class="opt-sub">Solo necesito el presupuesto en Europa</div>
-      </div>
-      <div class="opt-price" style="color:var(--accent);">USD 0</div>
-    </label>
-  </div>
-
-  <!-- PRESUPUESTO EUROPA -->
-  <div class="sec">🗺️ Presupuesto en Europa</div>
-  <div class="card">
-    <div class="input-group">
-      <div class="input-label">Meta en Europa (USD) <span id="lbl-meta">USD 1.400</span></div>
-      <input type="range" id="sl-meta" min="800" max="3000" value="1400" step="50" oninput="recalc()">
-    </div>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; font-size:11px; color:var(--muted);">
-      <div style="text-align:left;">$800 · mochilero</div>
-      <div style="text-align:center;">$1.400 · normal</div>
-      <div style="text-align:right;">$3.000 · cómodo</div>
+      <div class="input-label">Shopping / ropa (USD) <span id="lbl-shop">USD 100</span></div>
+      <input type="range" id="sl-shop" min="0" max="500" value="100" step="10" oninput="recalc()">
     </div>
   </div>
 
   <!-- RESUMEN -->
-  <div class="sec">📊 Resumen financiero</div>
+  <div class="sec">📊 Resumen</div>
   <div class="g2" style="margin-bottom:var(--gap);">
     <div class="mc">
-      <div class="mc-label">Ya tenés hoy</div>
-      <div class="mc-value" id="r-ya" style="color:var(--accent);">USD 0</div>
-      <div class="mc-sub">ahorros convertidos</div>
+      <div class="mc-label">Plata total</div>
+      <div class="mc-value" id="r-total" style="color:var(--accent);">USD 0</div>
+      <div class="mc-sub">banco + efectivo + mamá</div>
     </div>
     <div class="mc">
-      <div class="mc-label">Meta total del viaje</div>
-      <div class="mc-value" id="r-meta">USD 2.800</div>
-      <div class="mc-sub">pasaje + europa</div>
+      <div class="mc-label">Presupuestado</div>
+      <div class="mc-value" id="r-presup">USD 0</div>
+      <div class="mc-sub">tramos + shopping</div>
     </div>
     <div class="mc">
-      <div class="mc-label">Ahorrás en 2 meses</div>
-      <div class="mc-value" id="r-nuevo" style="color:var(--accent2);">USD 0</div>
-      <div class="mc-sub">de acá al viaje</div>
+      <div class="mc-label">Gastado hasta ahora</div>
+      <div class="mc-value" id="r-gastado" style="color:var(--danger);">USD 0</div>
+      <div class="mc-sub" id="r-gastado-count">0 gastos cargados</div>
     </div>
     <div class="mc">
-      <div class="mc-label">Total acumulado</div>
-      <div class="mc-value" id="r-total">USD 0</div>
-      <div class="mc-sub">al 24 de agosto</div>
+      <div class="mc-label">Te queda</div>
+      <div class="mc-value" id="r-resta" style="color:var(--accent2);">USD 0</div>
+      <div class="mc-sub">plata total − gastado</div>
     </div>
   </div>
 
-  <!-- STATUS -->
   <div id="status-box"></div>
 
-  <!-- MES A MES -->
-  <div class="sec">🗓️ Mes a mes</div>
-  <div class="month-grid" id="month-grid"></div>
+  <!-- AVANCE POR TRAMO -->
+  <div class="sec">📍 Avance por tramo</div>
+  <div class="card">
+    <div class="tramo-progress" id="tramo-progress"></div>
+  </div>
 
-  <!-- BANNER FINAL -->
+  <!-- CARGAR GASTO -->
+  <div class="sec">📝 Cargar un gasto</div>
+  <div class="card">
+    <div class="gasto-form">
+      <div class="input-group full" style="margin-bottom:0;">
+        <div class="input-label">Monto (USD)</div>
+        <input type="number" id="inp-monto" min="0" placeholder="ej: 25" step="0.5">
+      </div>
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Tramo</div>
+        <select id="inp-tramo"></select>
+      </div>
+      <div class="input-group" style="margin-bottom:0;">
+        <div class="input-label">Categoría</div>
+        <select id="inp-cat">
+          <option value="Comida">🍽️ Comida</option>
+          <option value="Transporte">🚌 Transporte</option>
+          <option value="Alojamiento">🛏️ Alojamiento</option>
+          <option value="Actividad">🎟️ Actividad</option>
+          <option value="Shopping">🛍️ Shopping</option>
+          <option value="Otro">✨ Otro</option>
+        </select>
+      </div>
+      <div class="input-group full" style="margin-bottom:0;">
+        <div class="input-label">Nota (opcional)</div>
+        <input type="text" id="inp-nota" placeholder="ej: cena en Gràcia">
+      </div>
+      <button class="btn-add" onclick="addGasto()">+ Agregar gasto</button>
+    </div>
+  </div>
+
+  <!-- LISTA DE GASTOS -->
+  <div class="sec">🧾 Últimos gastos <span class="sec-action" onclick="clearGastos()">borrar todo</span></div>
+  <div class="card">
+    <div id="gasto-list"><div class="gasto-empty">Todavía no cargaste ningún gasto.</div></div>
+  </div>
+
+  <!-- BANNER -->
   <div class="banner" id="banner">
     <div class="banner-left">
-      <div class="label">Total disponible para el viaje</div>
+      <div class="label">Te queda por día de viaje</div>
       <div class="sub" id="banner-sub">completá los datos arriba</div>
     </div>
     <div class="banner-right">
       <div class="big" id="banner-total" style="color:var(--accent);">USD 0</div>
-      <div class="small" id="banner-dia">— USD/día</div>
+      <div class="small" id="banner-dia">— por día restante</div>
     </div>
   </div>
 
   <div class="tip">
-    <strong>Consejo:</strong> Convertí los pesos a dólares lo antes posible para protegerlos de la inflación. Los ingresos temporales tratálos como bonus — guardálos directamente en el fondo del viaje cada vez que entren.
+    <strong>Tip:</strong> pagá siempre en euros con tarjeta, nunca en pesos/dólares (evitás el recargo de DCC). Y cargá los gastos apenas los hacés — así el "te queda" de arriba siempre refleja la realidad.
   </div>
 
 </div>
 
-<div class="footer">plan-europa · generado con claude · julio 2026</div>
+<div class="footer">plan-europa · gastos del viaje · generado con claude</div>
 
 <script>
-let pasajeMode = 'propio';
+const DEFAULT_TRAMOS = [
+  { id: 'madrid',    name: 'Madrid',    days: 2 },
+  { id: 'barcelona', name: 'Barcelona', days: 5 },
+  { id: 'mallorca',  name: 'Mallorca',  days: 5 },
+  { id: 'napoles',   name: 'Nápoles',   days: 2 },
+  { id: 'amalfi',    name: 'Amalfi',    days: 3 }
+];
+const DEFAULT_RATES = { madrid: 90, barcelona: 110, mallorca: 100, napoles: 90, amalfi: 160 };
+const TOTAL_DIAS = 17; // días de gasto real (sin contar el día de regreso)
 
-function setPasaje(mode) {
-  pasajeMode = mode;
-  document.getElementById('opt-propio').classList.toggle('selected', mode === 'propio');
-  document.getElementById('opt-amigo').classList.toggle('selected', mode === 'amigo');
+const LS_TRAMOS = 'planEuropaTramoRates';
+const LS_GASTOS = 'planEuropaGastos';
+const LS_FONDOS = 'planEuropaFondos';
+
+function loadTramoRates() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_TRAMOS));
+    if (saved) return saved;
+  } catch(e) {}
+  return { ...DEFAULT_RATES };
+}
+function saveTramoRates(rates) {
+  try { localStorage.setItem(LS_TRAMOS, JSON.stringify(rates)); } catch(e) {}
+}
+function resetTramos() {
+  saveTramoRates({ ...DEFAULT_RATES });
+  document.getElementById('sl-shop').value = 100;
+  buildTramoInputs();
   recalc();
 }
 
-function fmtARS(n) {
-  return '$' + Math.round(n).toLocaleString('es-AR');
+function loadGastos() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_GASTOS));
+    if (Array.isArray(saved)) return saved;
+  } catch(e) {}
+  return [];
 }
-function fmtUSD(n) {
-  return 'USD ' + Math.round(n).toLocaleString('es-AR');
+function saveGastos(list) {
+  try { localStorage.setItem(LS_GASTOS, JSON.stringify(list)); } catch(e) {}
+}
+function clearGastos() {
+  if (!confirm('¿Borrar todos los gastos cargados?')) return;
+  saveGastos([]);
+  renderGastos();
+  recalc();
 }
 
-const MONTHS = [
-  { label: 'Julio', factor: 1 },
-  { label: 'Agosto', factor: 24/31, note: 'hasta el 24' }
-];
-const DIAS = 21;
+function loadFondos() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_FONDOS));
+    if (saved) return saved;
+  } catch(e) {}
+  return null;
+}
+function saveFondos() {
+  const fondos = {
+    banco: document.getElementById('inp-banco').value,
+    ef: document.getElementById('inp-ef').value,
+    mama: document.getElementById('inp-mama').value,
+    extra: document.getElementById('inp-extra').value,
+    shop: document.getElementById('sl-shop').value
+  };
+  try { localStorage.setItem(LS_FONDOS, JSON.stringify(fondos)); } catch(e) {}
+}
+
+function fmtUSD(n) {
+  const sign = n < 0 ? '-' : '';
+  return sign + 'USD ' + Math.round(Math.abs(n)).toLocaleString('es-AR');
+}
+
+let CATEGORY_ICONS = { Comida:'🍽️', Transporte:'🚌', Alojamiento:'🛏️', Actividad:'🎟️', Shopping:'🛍️', Otro:'✨' };
+
+function buildTramoInputs() {
+  const rates = loadTramoRates();
+  const list = document.getElementById('tramo-list');
+  const sel = document.getElementById('inp-tramo');
+  list.innerHTML = '';
+  sel.innerHTML = '';
+  DEFAULT_TRAMOS.forEach(t => {
+    const rate = rates[t.id] ?? DEFAULT_RATES[t.id];
+    list.innerHTML += `
+      <div class="tramo-row">
+        <div class="tname">${t.name}</div>
+        <div class="tdays">${t.days}d</div>
+        <input type="number" min="0" value="${rate}" id="rate-${t.id}" oninput="onRateChange('${t.id}')">
+        <div class="tsub" id="sub-${t.id}">${fmtUSD(rate * t.days)}</div>
+      </div>`;
+    sel.innerHTML += `<option value="${t.id}">${t.name}</option>`;
+  });
+}
+
+function onRateChange(id) {
+  const rates = loadTramoRates();
+  rates[id] = parseFloat(document.getElementById(`rate-${id}`).value) || 0;
+  saveTramoRates(rates);
+  recalc();
+}
+
+function addGasto() {
+  const monto = parseFloat(document.getElementById('inp-monto').value);
+  if (!monto || monto <= 0) { alert('Ingresá un monto válido'); return; }
+  const tramo = document.getElementById('inp-tramo').value;
+  const cat = document.getElementById('inp-cat').value;
+  const nota = document.getElementById('inp-nota').value.trim();
+  const tramoName = DEFAULT_TRAMOS.find(t => t.id === tramo)?.name || tramo;
+
+  const gastos = loadGastos();
+  gastos.unshift({
+    id: Date.now(),
+    monto, tramo, tramoName, cat, nota,
+    date: new Date().toLocaleDateString('es-AR', { day: '2-digit', month: 'short' })
+  });
+  saveGastos(gastos);
+
+  document.getElementById('inp-monto').value = '';
+  document.getElementById('inp-nota').value = '';
+  renderGastos();
+  recalc();
+}
+
+function deleteGasto(id) {
+  const gastos = loadGastos().filter(g => g.id !== id);
+  saveGastos(gastos);
+  renderGastos();
+  recalc();
+}
+
+function renderGastos() {
+  const gastos = loadGastos();
+  const list = document.getElementById('gasto-list');
+  if (gastos.length === 0) {
+    list.innerHTML = '<div class="gasto-empty">Todavía no cargaste ningún gasto.</div>';
+    return;
+  }
+  list.innerHTML = gastos.slice(0, 25).map(g => `
+    <div class="gasto-item">
+      <div class="gasto-tag">${CATEGORY_ICONS[g.cat] || '✨'} ${g.tramoName}</div>
+      <div class="gasto-note">${g.nota || g.cat}<span class="gasto-date">${g.date} · ${g.cat}</span></div>
+      <div class="gasto-amt">-${fmtUSD(g.monto)}</div>
+      <div class="gasto-del" onclick="deleteGasto(${g.id})">✕</div>
+    </div>`).join('');
+}
 
 function recalc() {
-  const usdAh = parseFloat(document.getElementById('inp-usd-ah').value) || 0;
-  const arsAh = parseFloat(document.getElementById('inp-ars-ah').value) || 0;
-  const ing   = parseFloat(document.getElementById('inp-ing').value) || 0;
-  const gas   = parseFloat(document.getElementById('inp-gas').value) || 0;
-  const tc    = parseInt(document.getElementById('sl-tc').value);
-  const sep   = parseInt(document.getElementById('sl-sep').value);
-  const metaEur = parseInt(document.getElementById('sl-meta').value);
+  const banco = parseFloat(document.getElementById('inp-banco').value) || 0;
+  const ef    = parseFloat(document.getElementById('inp-ef').value) || 0;
+  const mama  = parseFloat(document.getElementById('inp-mama').value) || 0;
+  const extra = parseFloat(document.getElementById('inp-extra').value) || 0;
+  const shop  = parseInt(document.getElementById('sl-shop').value);
 
-  // Labels
-  document.getElementById('lbl-usd-ah').textContent = fmtUSD(usdAh);
-  document.getElementById('lbl-ars-ah').textContent = fmtARS(arsAh);
-  document.getElementById('lbl-tc').textContent = fmtARS(tc);
-  document.getElementById('lbl-ing').textContent = fmtARS(ing);
-  document.getElementById('lbl-gas').textContent = fmtARS(gas);
-  document.getElementById('lbl-meta').textContent = fmtUSD(metaEur);
+  saveFondos();
 
-  // Libre por mes
-  const libre = ing - gas;
-  const libreEl = document.getElementById('libre-mes');
-  libreEl.textContent = fmtARS(Math.max(0, libre));
-  libreEl.style.color = libre >= 0 ? 'var(--accent)' : 'var(--danger)';
+  document.getElementById('lbl-banco').textContent = fmtUSD(banco);
+  document.getElementById('lbl-ef').textContent = fmtUSD(ef);
+  document.getElementById('lbl-mama').textContent = fmtUSD(mama);
+  document.getElementById('lbl-extra').textContent = fmtUSD(extra);
+  document.getElementById('lbl-shop').textContent = fmtUSD(shop);
 
-  // Ajustar max del slider de separación
-  const maxSep = Math.max(libre, 0);
-  document.getElementById('sl-sep').max = Math.max(maxSep, 100000);
-  const sepReal = Math.min(sep, Math.max(libre, 0));
-  document.getElementById('lbl-sep').textContent = fmtARS(sepReal);
+  const totalPlata = banco + ef + mama + extra;
 
-  // Ahorros convertidos
-  const yaUSD = usdAh + (arsAh / tc);
-
-  // Pasaje
-  const costoViaje = metaEur + (pasajeMode === 'propio' ? 1400 : 0);
-  const metaLabel = pasajeMode === 'propio'
-    ? `Europa USD ${metaEur} + pasaje USD 1.400`
-    : `Solo Europa · pasaje cubierto`;
-
-  // Mes a mes
-  const usdMes = sepReal / tc;
-  let acumNuevo = 0;
-  const grid = document.getElementById('month-grid');
-  grid.innerHTML = '';
-
-  MONTHS.forEach((m, i) => {
-    const ganaMes = Math.round(usdMes * m.factor);
-    acumNuevo += ganaMes;
-    const totalAcum = yaUSD + acumNuevo;
-    const pct = Math.min(100, Math.round((totalAcum / costoViaje) * 100));
-    const done = totalAcum >= costoViaje;
-    const color = done ? '#4ade80' : '#60a5fa';
-
-    grid.innerHTML += `
-      <div class="mcard ${done ? 'done' : ''}">
-        <div class="mcard-name">${m.label}${m.note ? '<br>'+m.note : ''}</div>
-        <div class="mcard-save">+${fmtUSD(ganaMes)}</div>
-        <div class="mcard-total" style="color:${color};">${fmtUSD(Math.round(totalAcum))}</div>
-        <div class="prog-track"><div class="prog-fill" style="width:${pct}%; background:${color};"></div></div>
-        <div class="mcard-pct">${pct}% de la meta</div>
-      </div>`;
+  const rates = loadTramoRates();
+  let totalPresup = 0;
+  const tramoSubtotals = {};
+  DEFAULT_TRAMOS.forEach(t => {
+    const rate = rates[t.id] ?? DEFAULT_RATES[t.id];
+    const sub = rate * t.days;
+    tramoSubtotals[t.id] = sub;
+    totalPresup += sub;
+    const el = document.getElementById(`sub-${t.id}`);
+    if (el) el.textContent = fmtUSD(sub);
   });
+  totalPresup += shop;
 
-  const totalFinal = yaUSD + acumNuevo;
-  const diff = totalFinal - costoViaje;
+  const gastos = loadGastos();
+  const totalGastado = gastos.reduce((s, g) => s + g.monto, 0);
+  const resta = totalPlata - totalGastado;
 
-  // Resumen cards
-  document.getElementById('r-ya').textContent = fmtUSD(Math.round(yaUSD));
-  document.getElementById('r-meta').textContent = fmtUSD(costoViaje);
-  document.getElementById('r-nuevo').textContent = fmtUSD(Math.round(acumNuevo));
-  document.getElementById('r-total').textContent = fmtUSD(Math.round(totalFinal));
+  document.getElementById('r-total').textContent = fmtUSD(totalPlata);
+  document.getElementById('r-presup').textContent = fmtUSD(totalPresup);
+  document.getElementById('r-gastado').textContent = fmtUSD(totalGastado);
+  document.getElementById('r-gastado-count').textContent = `${gastos.length} gasto${gastos.length===1?'':'s'} cargado${gastos.length===1?'':'s'}`;
+  document.getElementById('r-resta').textContent = fmtUSD(resta);
+  document.getElementById('r-resta').style.color = resta >= 0 ? 'var(--accent2)' : 'var(--danger)';
 
-  // Status
+  // Status box: presupuesto vs plata total
   const sb = document.getElementById('status-box');
-  if (totalFinal === 0 && sepReal === 0 && yaUSD === 0) {
-    sb.innerHTML = '';
-  } else if (diff >= 0) {
-    sb.innerHTML = `<div class="status-ok"><span class="status-icon">✓</span><div><strong>¡Llegás!</strong> Con este plan superás la meta en ${fmtUSD(Math.round(diff))}. Ese colchón cubre imprevistos, excursiones o simplemente viajar más tranquilo.</div></div>`;
-  } else if (diff >= -300) {
-    sb.innerHTML = `<div class="status-warn"><span class="status-icon">⚡</span><div><strong>Muy justo.</strong> Te faltan ${fmtUSD(Math.round(Math.abs(diff)))}. Subí el ahorro mensual o tratá los ingresos temporales como refuerzo directo al fondo del viaje.</div></div>`;
+  const diffPresupPlata = totalPlata - totalPresup;
+  if (diffPresupPlata >= 100) {
+    sb.innerHTML = `<div class="status-ok"><span class="status-icon">✓</span><div><strong>Bien cubierto.</strong> Tu plata total supera lo presupuestado por tramo en ${fmtUSD(diffPresupPlata)}. Ese es tu colchón para imprevistos.</div></div>`;
+  } else if (diffPresupPlata >= -100) {
+    sb.innerHTML = `<div class="status-warn"><span class="status-icon">⚡</span><div><strong>Justo.</strong> Lo presupuestado por tramo está muy cerca de tu plata total. Poco margen para imprevistos — cuidá el gasto diario.</div></div>`;
   } else {
-    sb.innerHTML = `<div class="status-danger"><span class="status-icon">!</span><div><strong>Faltan ${fmtUSD(Math.round(Math.abs(diff)))}.</strong> Necesitás aumentar el ahorro mensual, conseguir ingresos extra, o ajustar el presupuesto en Europa.</div></div>`;
+    sb.innerHTML = `<div class="status-danger"><span class="status-icon">!</span><div><strong>Presupuesto por encima de la plata disponible</strong> por ${fmtUSD(Math.abs(diffPresupPlata))}. Bajá el USD/día de algún tramo o el shopping.</div></div>`;
   }
 
-  // Banner
-  document.getElementById('banner-total').textContent = fmtUSD(Math.round(totalFinal));
-  document.getElementById('banner-total').style.color = diff >= 0 ? 'var(--accent)' : 'var(--danger)';
-  document.getElementById('banner-sub').textContent = metaLabel;
-  document.getElementById('banner-dia').textContent = totalFinal > 0
-    ? `≈ USD ${Math.round(totalFinal / DIAS)} por día de viaje`
-    : '— completá los datos arriba';
+  // Avance por tramo: cuánto gastaste vs presupuestado en cada tramo
+  const prog = document.getElementById('tramo-progress');
+  prog.innerHTML = DEFAULT_TRAMOS.map(t => {
+    const gastadoTramo = gastos.filter(g => g.tramo === t.id).reduce((s, g) => s + g.monto, 0);
+    const presupTramo = tramoSubtotals[t.id];
+    const pct = presupTramo > 0 ? Math.min(100, Math.round((gastadoTramo / presupTramo) * 100)) : 0;
+    const over = gastadoTramo > presupTramo;
+    const color = over ? 'var(--danger)' : (pct > 80 ? 'var(--warn)' : 'var(--accent2)');
+    return `
+      <div class="tp-row">
+        <div class="tp-top">
+          <span class="tp-name">${t.name}</span>
+          <span class="tp-nums">${fmtUSD(gastadoTramo)} / ${fmtUSD(presupTramo)}</span>
+        </div>
+        <div class="tp-track"><div class="tp-fill" style="width:${pct}%; background:${color};"></div></div>
+      </div>`;
+  }).join('') + (gastos.filter(g => g.tramo === 'shopping').length ? '' : '');
+
+  // Banner: resta por día (contando desde hoy hasta el final del viaje, aprox usando TOTAL_DIAS)
+  document.getElementById('banner-total').textContent = fmtUSD(resta);
+  document.getElementById('banner-total').style.color = resta >= 0 ? 'var(--accent)' : 'var(--danger)';
+  document.getElementById('banner-sub').textContent = `Plata total ${fmtUSD(totalPlata)} · presupuestado ${fmtUSD(totalPresup)}`;
+  document.getElementById('banner-dia').textContent = resta > 0
+    ? `≈ ${fmtUSD(Math.round(resta / TOTAL_DIAS))} por día si repartís lo que queda en ${TOTAL_DIAS} días`
+    : '— revisá el gasto, te estás pasando';
 }
 
+// Init
+buildTramoInputs();
+const savedFondos = loadFondos();
+if (savedFondos) {
+  document.getElementById('inp-banco').value = savedFondos.banco ?? 1275;
+  document.getElementById('inp-ef').value = savedFondos.ef ?? 955;
+  document.getElementById('inp-mama').value = savedFondos.mama ?? 600;
+  document.getElementById('inp-extra').value = savedFondos.extra ?? 0;
+  document.getElementById('sl-shop').value = savedFondos.shop ?? 100;
+}
+renderGastos();
 recalc();
 </script>
 </body>
